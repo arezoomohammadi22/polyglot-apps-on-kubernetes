@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flask-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: flask-app
+  template:
+    metadata:
+      labels:
+        app: flask-app
+    spec:
+      containers:
+      - name: flask-app
+        image: flask-k8s-demo:v4
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 5000
+        envFrom:
+        - configMapRef:
+            name: app-config
+        - secretRef:
+            name: app-secret
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: flask-service
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: 5000
+  selector:
+    app: flask-app
