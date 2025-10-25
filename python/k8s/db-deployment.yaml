@@ -16,13 +16,9 @@ spec:
       - name: postgres
         image: postgres:15
         imagePullPolicy: IfNotPresent
-        env:
-        - name: POSTGRES_DB
-          value: flaskdb
-        - name: POSTGRES_USER
-          value: flaskuser
-        - name: POSTGRES_PASSWORD
-          value: strongpassword123
+        envFrom:
+          - secretRef:
+              name: postgres-secret       # 🔒 pull all envs from secret
         ports:
         - containerPort: 5432
         volumeMounts:
