@@ -1,0 +1,41 @@
+{{- if .Values.postgres.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "python-app.fullname" . }}-postgres
+  labels:
+    app: postgres
+    {{- include "python-app.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres
+  template:
+    metadata:
+      labels:
+        app: postgres
+    spec:
+      containers:
+        - name: postgres
+          image: "{{ .Values.postgres.image.repository }}:{{ .Values.postgres.image.tag }}"
+          imagePullPolicy: {{ .Values.postgres.image.pullPolicy }}
+
+          envFrom:
+            - secretRef:
+                name: {{ .Values.postgres.secretName }}
+
+          ports:
+            - containerPort: {{ .Values.postgres.port }}
+              name: postgres
+              protocol: TCP
+
+          volumeMounts:
+            - name: postgres-storage
+              mountPath: {{ .Values.postgres.dataMountPath }}
+
+      volumes:
+        - name: postgres-storage
+          emptyDir: {}
+{{- end }}
+
