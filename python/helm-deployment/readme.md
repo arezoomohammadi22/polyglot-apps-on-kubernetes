@@ -202,11 +202,3 @@ kubectl -n devops get svc
 
 # 🎉 Done!
 
-You now have a **fully Helm-managed**, **secure**, **SealedSecrets-based** deployment for both Flask + Postgres.
-
-If you'd like, I can generate:
-- diagram (architecture)
-- values.yaml ready-to-use
-- GitHub-ready structure
-
-Just tell me! 🚀
